@@ -1,6 +1,11 @@
 int pinRele = 2;
 int pinSensor = A0; 
 int umidade;
+int i = 0;
+int soma=0;
+int quantidade = 10;
+int leitura = 0;
+
 void setup(){
  Serial.begin(9600);
  pinMode(pinRele,OUTPUT); //Pino de saída para chavear relé
@@ -8,19 +13,20 @@ void setup(){
 }
  
 void loop() {
- 
-   
-   umidade = analogRead(pinSensor);
+   soma = 0;
+   for(i=0;i<quantidade;i++){
+     leitura = analogRead(pinSensor);
+     soma= soma + leitura;
+     Serial.print("parcial:");
+      Serial.println(leitura);
+      delay(10);
+   }
+   umidade = soma/quantidade;
    //Umidade
-   Serial.print("Umidade:");
+   Serial.print("total:");
    Serial.println(umidade);
-   //digitalWrite(pinRele, HIGH); //Altera estado do pino
-   //delay(1000);
-   //digitalWrite(pinRele, LOW); //Altera estado do pino
-   //delay(1000);
-   //Se umidade menor que 300 == molhado
+
    if(umidade > 700){
-     //delay de 10 minutos, 1000*60 == 1 minuto * 10 == 10 minutos
      digitalWrite(pinRele, LOW);
      delay(1000);
    }
@@ -28,7 +34,7 @@ void loop() {
      //liga o pino vermelho, abre a mangueira
      digitalWrite(pinRele, HIGH);
      //delay de 1 minuto
-     delay(1000);
+     delay(2000);
    }
  
 }
